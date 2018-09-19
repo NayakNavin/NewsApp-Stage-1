@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dimen_size_16dp">16dp</dimen>
+    <dimen name="text_size_20sp">20sp</dimen>
+    <dimen name="dimen_size_8dp">8dp</dimen>
+    <dimen name="dimen_size_24dp">24dp</dimen>
+    <dimen name="text_size_16sp">16sp</dimen>
+    <dimen name="text_size_13sp">13sp</dimen>
+    <dimen name="layout_size">2dp</dimen>
+    <dimen name="divider_height">0dp</dimen>
+    <dimen name="image_view_padding">50dp</dimen>
+</resources>
