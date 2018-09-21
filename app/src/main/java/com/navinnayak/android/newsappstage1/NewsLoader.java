@@ -1,7 +1,7 @@
 package com.navinnayak.android.newsappstage1;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.support.v4.content.AsyncTaskLoader;
 
 import java.util.List;
 
@@ -12,19 +12,16 @@ import java.util.List;
 
 public class NewsLoader extends AsyncTaskLoader<List<News>> {
 
-    /**
-     * URL for news data from the Guardian
-     */
-    private static String REQUEST_URL =
-            "http://content.guardianapis.com/search?show-tags=contributor&api-key=a6ce801a-77a8-44a1-a14d-7c3eacf86d30";
+    private String mUrl;
 
     /**
      * Constructs a new {@link NewsLoader}.
      *
      * @param context of the activity
      */
-    public NewsLoader(Context context) {
+    public NewsLoader(Context context, String url) {
         super(context);
+        this.mUrl = url;
     }
 
     @Override
@@ -37,11 +34,11 @@ public class NewsLoader extends AsyncTaskLoader<List<News>> {
      */
     @Override
     public List<News> loadInBackground() {
-        if (REQUEST_URL == null) {
+        if (mUrl == null) {
             return null;
         }
         // Perform the network request, parse the response, and extract a list of news.
-        List<News> newsList = QueryUtils.fetchNewsData(REQUEST_URL);
+        List<News> newsList = QueryUtils.fetchNewsData(mUrl);
         return newsList;
     }
 }
