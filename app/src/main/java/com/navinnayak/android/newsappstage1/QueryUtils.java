@@ -166,24 +166,36 @@ public class QueryUtils {
                 JSONObject currentResults = resultsArray.getJSONObject(i);
 
                 // Extract the value for the key called "webTitle"
-                String title = currentResults.getString("webTitle");
+                String title = "";
+                if (currentResults.has("webTitle")) {
+                    title = currentResults.getString("webTitle");
+                }
 
                 // Extract the value for the key called "sectionName"
-                String section = currentResults.getString("sectionName");
+                String section = "";
+                if (currentResults.has("sectionName")) {
+                    section = currentResults.getString("sectionName");
+                }
 
                 // Extract the value for the key called "webPublicationDate"
-                String dateTime = currentResults.getString("webPublicationDate");
+                String dateTime = "";
+                if (currentResults.has("webPublicationDate")) {
+                    dateTime = currentResults.getString("webPublicationDate");
+                }
                 dateTime = formatDate(dateTime);
 
                 // Extract the value for the key called "webUrl"
-                String url = currentResults.getString("webUrl");
+                String url = "";
+                if (currentResults.has("webUrl")) {
+                    url = currentResults.getString("webUrl");
+                }
 
                 // Extract the JSONArray associated with the key called "tags",
-                JSONArray tagsauthor = currentResults.getJSONArray("tags");
+                JSONArray tagsAuthor = currentResults.getJSONArray("tags");
                 String author = "";
-                if (tagsauthor.length() != 0) {
-                    JSONObject currenttagsauthor = tagsauthor.getJSONObject(0);
-                    author = currenttagsauthor.getString("webTitle");
+                if (tagsAuthor.length() != 0) {
+                    JSONObject currentTagsAuthor = tagsAuthor.getJSONObject(0);
+                    author = currentTagsAuthor.getString("webTitle");
                 } else {
                     author = "";
                 }
