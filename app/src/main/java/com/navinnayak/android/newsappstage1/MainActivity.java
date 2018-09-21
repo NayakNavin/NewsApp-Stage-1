@@ -6,10 +6,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
      * Adapter for the list of news
      */
     private NewsAdapter mAdapter;
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     /**
      * URL for news data from the Guardian
@@ -89,13 +91,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
-            // Get a reference to the LoaderManager, in order to interact with loaders.
-            LoaderManager loaderManager = getSupportLoaderManager();
 
-            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+
+            // Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            loaderManager.initLoader(0, null, this);
+            getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+
         } else {
             // Otherwise, display error
             // First, hide loading indicator so error message will be visible
@@ -104,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
             // Update empty state with no connection error message
             mEmptyStateTextView.setText(R.string.no_internet_connection);
+            Log.e(LOG_TAG, "no internet");
         }
-        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -122,9 +124,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
 
-        // Set empty state text to display "No news found."
-        mEmptyStateTextView.setText(R.string.no_news);
-
         // If there is a valid list of {@link News}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (news != null && !news.isEmpty()) {
@@ -132,6 +131,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             mAdapter.setNotifyOnChange(false);
             mAdapter.setNotifyOnChange(true);
             mAdapter.addAll(news);
+        } else {
+            //Set empty state text to display "No news found."
+            mEmptyStateTextView.setText(R.string.no_news);
+            Log.e(LOG_TAG, "no news");
         }
     }
 
