@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">News App Stage 1</string>
-    <string name="no_news">No news found! \nAll servers are busy\nCheck after sometime</string>
-    <string name="no_internet_connection">No internet connection!\nTry Again\nAfter Checking internet connection\nReopen the app</string>
+    <string name="no_news">It\'s us not you. We couldn\'t get you any news :(</string>
+    <string name="no_internet_connection">No Internet! Try Later</string>
     <string name="logo">logo</string>
+    <string name="webTitle">webTitle</string>
+    <string name="sectionName">sectionName</string>
 </resources>

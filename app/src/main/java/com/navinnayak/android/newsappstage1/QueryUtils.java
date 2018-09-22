@@ -27,7 +27,13 @@ public class QueryUtils {
      * Tag for the log messages
      */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
-
+    public static final String WEBTITLE = "webTitle";
+    public static final String RESULTS = "results";
+    public static final String RESPONSE = "response";
+    public static final String WEBPUBLICATIONDATE = "webPublicationDate";
+    public static final String WEBURL = "webUrl";
+    public static final String SECTIONNAME = "sectionName";
+    public static final String TAGS = "tags";
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
      * This class is only meant to hold static variables and methods, which can be accessed
@@ -154,11 +160,11 @@ public class QueryUtils {
             JSONObject baseJsonResponse = new JSONObject(newsJSON);
 
             // Extract the JSONObject associated with the key called "response"
-            JSONObject response = baseJsonResponse.getJSONObject("response");
+            JSONObject response = baseJsonResponse.getJSONObject(RESPONSE);
 
             // Extract the JSONArray associated with the key called "results",
             // which represents a list of results (or news).
-            JSONArray resultsArray = response.getJSONArray("results");
+            JSONArray resultsArray = response.getJSONArray(RESULTS);
 
             // For each news in the resultsArray, create an {@link News} object
             for (int i = 0; i < resultsArray.length(); i++) {
@@ -166,36 +172,27 @@ public class QueryUtils {
                 JSONObject currentResults = resultsArray.getJSONObject(i);
 
                 // Extract the value for the key called "webTitle"
-                String title = "";
-                if (currentResults.has("webTitle")) {
-                    title = currentResults.getString("webTitle");
-                }
+                String title = currentResults.has(WEBTITLE) ? currentResults.getString(WEBTITLE) : "";
 
                 // Extract the value for the key called "sectionName"
-                String section = "";
-                if (currentResults.has("sectionName")) {
-                    section = currentResults.getString("sectionName");
-                }
+                String section = currentResults.has(SECTIONNAME) ? currentResults.getString(SECTIONNAME) : "";
+
 
                 // Extract the value for the key called "webPublicationDate"
-                String dateTime = "";
-                if (currentResults.has("webPublicationDate")) {
-                    dateTime = currentResults.getString("webPublicationDate");
-                }
+                String dateTime = currentResults.has(WEBPUBLICATIONDATE) ? currentResults.getString(WEBPUBLICATIONDATE) : "";
+
                 dateTime = formatDate(dateTime);
 
                 // Extract the value for the key called "webUrl"
-                String url = "";
-                if (currentResults.has("webUrl")) {
-                    url = currentResults.getString("webUrl");
-                }
+                String url = currentResults.has(WEBURL) ? currentResults.getString(WEBURL) : "";
+
 
                 // Extract the JSONArray associated with the key called "tags",
-                JSONArray tagsAuthor = currentResults.getJSONArray("tags");
+                JSONArray tagsAuthor = currentResults.getJSONArray(TAGS);
                 String author = "";
                 if (tagsAuthor.length() != 0) {
                     JSONObject currentTagsAuthor = tagsAuthor.getJSONObject(0);
-                    author = currentTagsAuthor.getString("webTitle");
+                    author = currentTagsAuthor.getString(WEBTITLE);
                 } else {
                     author = "";
                 }

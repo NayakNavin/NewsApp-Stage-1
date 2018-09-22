@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
      */
     private TextView mEmptyStateTextView;
 
+    private ListView newsListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +54,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         swipe.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
 
         // Find a reference to the {@link ListView} in the layout
-        ListView newsListView = findViewById(R.id.list);
+        newsListView = findViewById(R.id.list);
 
         mEmptyStateTextView = findViewById(R.id.empty_view);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mEmptyStateTextView.setTextAppearance(R.style.TextAppearance_AppCompat_Headline);
+        }
         newsListView.setEmptyView(mEmptyStateTextView);
 
         // Create a new adapter that takes an empty list of news as input
@@ -81,33 +87,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 startActivity(websiteIntent);
             }
         });
-
-        // Get a reference to the ConnectivityManager to check state of network connectivity
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        // Get details on the currently active default data network
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-
-        // If there is a network connection, fetch data
-        if (networkInfo != null && networkInfo.isConnected()) {
-
-
-            // Pass in the int ID constant defined above and pass in null for
-            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-            // because this activity implements the LoaderCallbacks interface).
-            getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-
-        } else {
-            // Otherwise, display error
-            // First, hide loading indicator so error message will be visible
-            View loadingIndicator = findViewById(R.id.loading_indicator);
-            loadingIndicator.setVisibility(View.GONE);
-
-            // Update empty state with no connection error message
-            mEmptyStateTextView.setText(R.string.no_internet_connection);
-            Log.e(LOG_TAG, "no internet");
-        }
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -127,14 +107,38 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         // If there is a valid list of {@link News}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (news != null && !news.isEmpty()) {
-            mAdapter.clear();
-            mAdapter.setNotifyOnChange(false);
-            mAdapter.setNotifyOnChange(true);
-            mAdapter.addAll(news);
+            this.showResults(news);
         } else {
-            //Set empty state text to display "No news found."
+            this.hideResults();
+        }
+    }
+
+    private void showResults(List<News> newsList) {
+        mAdapter.clear();
+        newsListView.setVisibility(View.VISIBLE);
+        mEmptyStateTextView.setVisibility(View.GONE);
+        mAdapter.setNotifyOnChange(false);
+        mAdapter.setNotifyOnChange(true);
+        mAdapter.addAll(newsList);
+    }
+
+    private void hideResults() {
+        newsListView.setVisibility(View.GONE);
+        mEmptyStateTextView.setVisibility(View.VISIBLE);
+        // Get a reference to the ConnectivityManager to check state of network connectivity
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
             mEmptyStateTextView.setText(R.string.no_news);
             Log.e(LOG_TAG, "no news");
+
+        } else {
+            mEmptyStateTextView.setText(R.string.no_internet_connection);
+            Log.e(LOG_TAG, "no internet");
         }
     }
 

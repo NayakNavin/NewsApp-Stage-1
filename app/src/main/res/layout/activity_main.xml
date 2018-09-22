@@ -15,10 +15,7 @@
             android:divider="@null"
             android:dividerHeight="@dimen/divider_height"
             android:orientation="vertical" />
-
-
     </android.support.v4.widget.SwipeRefreshLayout>
-
 
     <!-- Image at start  -->
     <ImageView
@@ -32,7 +29,6 @@
         android:padding="@dimen/image_view_padding"
         android:scaleType="centerCrop"
         android:src="@drawable/the_guardian" />
-
 
     <!-- Loading indicator is only shown before the first load -->
     <ProgressBar
@@ -49,6 +45,5 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textAppearance="?android:textAppearanceMedium" />
-
 
 </RelativeLayout>
